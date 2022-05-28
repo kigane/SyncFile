@@ -23,7 +23,7 @@ if __name__ == '__main__':
     )
     print('Loading model weights...')
     model.load_state_dict(torch.load(
-        'my_checkpoint.pth.tar', map_location=device)["state_dict"])
+        'flickr8k/my_checkpoint.pth.tar', map_location=device)["state_dict"])
     model.to(device)
     model.eval()
     print('Building vocabulary...')

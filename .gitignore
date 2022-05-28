@@ -1,6 +1,9 @@
 ImageCaption/flickr8k
 ImageCaption/runs
-*.mkv
 save
 flagged
+
+*.mkv
 *.ipynb
+**/__pycache__/
+**/*.pyc
