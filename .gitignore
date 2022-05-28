@@ -1,2 +1,6 @@
 ImageCaption/flickr8k
 ImageCaption/runs
+*.mkv
+save
+flagged
+*.ipynb
