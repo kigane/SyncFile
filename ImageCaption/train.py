@@ -1,12 +1,13 @@
 import torch
-from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
-from utils import save_checkpoint, load_checkpoint, print_examples
+from tqdm import tqdm
+
 from get_loader import get_loader
 from model import CNNtoRNN
+from utils import load_checkpoint, print_examples, save_checkpoint
 
 
 def train():
@@ -28,7 +29,7 @@ def train():
 
     torch.backends.cudnn.benchmark = True
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    load_model = False
+    load_model = True
     save_model = True
 
     # Hyperparameters
@@ -70,7 +71,7 @@ def train():
             save_checkpoint(checkpoint)
 
         for idx, (imgs, captions) in tqdm(
-            enumerate(train_loader), total=len(train_loader), leave=False
+            enumerate(train_loader), desc=f'epoch {epoch+1:>3}', total=len(train_loader), leave=False
         ):
             imgs = imgs.to(device)
             captions = captions.to(device)

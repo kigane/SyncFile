@@ -1,21 +1,20 @@
 import os  # when loading file paths
+
 import pandas as pd  # for lookup in annotation file
 import spacy  # for tokenizer
 import torch
+import torchvision.transforms as transforms
+from PIL import Image  # Load img
 from torch.nn.utils.rnn import pad_sequence  # pad batch
 from torch.utils.data import DataLoader, Dataset
-from PIL import Image  # Load img
-import torchvision.transforms as transforms
-
 
 # We want to convert text -> numerical values
 # 1. We need a Vocabulary mapping each word to a index
 # 2. We need to setup a Pytorch dataset to load the data
 # 3. Setup padding of every batch (all examples should be
 #    of same seq_len and setup dataloader)
-# Note that loading the image is very easy compared to the text!
 
-# Download with: python -m spacy download en
+# Download with: python -m spacy download en_core_web_sm
 spacy_eng = spacy.load("en_core_web_sm")
 
 
@@ -96,10 +95,10 @@ class MyCollate:
 
     def __call__(self, batch):
         imgs = [item[0].unsqueeze(0) for item in batch]
-        imgs = torch.cat(imgs, dim=0)
-        targets = [item[1] for item in batch]
-        targets = pad_sequence(targets, batch_first=False, padding_value=self.pad_idx)
-
+        imgs = torch.cat(imgs, dim=0) # [BCHW]
+        targets = [item[1] for item in batch]  # [BL] L长度不同
+        targets = pad_sequence(targets, batch_first=False,  # [LB] L长度相同
+                               padding_value=self.pad_idx)
         return imgs, targets
 
 
