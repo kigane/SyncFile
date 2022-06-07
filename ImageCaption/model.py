@@ -30,11 +30,11 @@ class DecoderRNN(nn.Module):
         self.dropout = nn.Dropout(0.5)
     
     def forward(self, features, captions):
-        embbedings = self.dropout(self.embed(captions))
-        # unsqueeze(0) 添加时间维度seq_len
-        embbedings = torch.cat([features.unsqueeze(0), embbedings], dim=0)
-        hiddens, _ = self.LSTM(embbedings)
-        outputs = self.linear(hiddens)
+        embedings = self.dropout(self.embed(captions))
+        # unsqueeze(0) 添加时间维度seq_len [LBE]
+        embedings = torch.cat([features.unsqueeze(0), embedings], dim=0)
+        hiddens, _ = self.LSTM(embedings) # [LBE]
+        outputs = self.linear(hiddens) # [LBV]
         return outputs
 
 #----------------------------------------------------------------------------
@@ -55,11 +55,11 @@ class CNNtoRNN(nn.Module):
 
         with torch.no_grad():
             x = self.encoderCNN(img).unsqueeze(0)
-            states = None
+            c = None
 
             for _ in range(max_length):
                 # 逐个预测
-                h, states = self.decoderRNN.LSTM(x, states)
+                h, c = self.decoderRNN.LSTM(x, c)
                 output = self.decoderRNN.linear(h.squeeze(0))
                 predicted = output.argmax(1)
                 # 预测的值作为下一次预测的输入

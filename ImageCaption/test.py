@@ -2,7 +2,6 @@ import gradio as gr
 import pandas as pd
 import torch
 from torchvision.transforms import transforms
-from zmq import device
 
 from get_loader import Vocabulary
 from model import CNNtoRNN
@@ -23,7 +22,7 @@ if __name__ == '__main__':
     )
     print('Loading model weights...')
     model.load_state_dict(torch.load(
-        'flickr8k/my_checkpoint.pth.tar', map_location=device)["state_dict"])
+        'my_checkpoint.pth.tar', map_location=device)["state_dict"])
     model.to(device)
     model.eval()
     print('Building vocabulary...')

@@ -53,7 +53,7 @@ def train():
 
     if load_model:
         step = load_checkpoint(torch.load(
-            "my_checkpoint.pth.tar"), model, optimizer)
+            "my_checkpoint.pth.tar", map_location=torch.device('cpu')), model, optimizer)
 
     model.train()
 
